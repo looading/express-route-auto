@@ -1,4 +1,7 @@
-const config = require('../config');
+
+const config = require('../config')
+
+
 
 class Action {
   constructor(res, req, next) {
@@ -13,4 +16,4 @@ class Action {
 }
 
 
-module.exports = Action
+module.exports = Action;

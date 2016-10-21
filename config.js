@@ -1,3 +1,5 @@
-module.exports = {
-  
+let config = {
+	
 }
+
+module.exports = config
