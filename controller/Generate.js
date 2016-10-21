@@ -3,7 +3,7 @@ const express = require('express');
 const util = require('util');
 
 
-let config = require('../../config');
+let config = require('../config');
 
 let router = express.Router();
 
