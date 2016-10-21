@@ -1,7 +1,7 @@
 {
-  "name": "express-route-manager",
+  "name": "express-route-auto",
   "version": "1.0.0",
-  "description": "manage express route",
+  "description": "auto express route",
   "main": "index.js",
   "scripts": {
     "test": "mocha .setup.js test/*.js"
