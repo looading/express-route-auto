@@ -1,6 +1,6 @@
 {
   "name": "express-route-auto",
-  "version": "1.0.7-alpha",
+  "version": "1.0.7-alpha.1",
   "description": "auto express route",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,14 @@
     "express",
     "route"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looading/express-route-auto.git"
+  },
+  "bugs": {
+    "url": "https://github.com/looading/express-route-auto/issues"
+  },
+  "homepage": "https://github.com/looading/express-route-auto#readme",
   "author": "ctyloading",
   "license": "MIT",
   "dependencies": {

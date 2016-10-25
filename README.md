@@ -4,7 +4,8 @@
 
 
 ## express-route-auto
-用于express路由的自动加载
+用于express路由的自动加载(目前支持post)
+初步想法是为了便于 后端api服务的开发
 
 ## install
 
@@ -81,3 +82,15 @@ module.exports = new Index();
 
 ### continue
 按照上述的配置基本就能跑起来了
+
+由于是基于自己项目的，目前还没有扩展开来，
+
+### feature
+
+	- 支持 get 等
+
+	- 支持 /user/:id 
+
+	- 支持 middleware
+
+	- 提供视图
