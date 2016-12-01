@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/looading/express-route-auto.svg?branch=master)](https://travis-ci.org/looading/express-route-auto)
+[![Build Status](https://travis-ci.org/looading/express-route-auto.svg?branch=v1.1.0)](https://travis-ci.org/looading/express-route-auto)
 [![npm](https://img.shields.io/npm/v/express-route-auto.svg?maxAge=2592000)](https://www.npmjs.com/package/express-route-auto)
 [![npm](https://img.shields.io/npm/dm/express-route-auto.svg?maxAge=2592000)](https://www.npmjs.com/package/express-route-auto)
 
