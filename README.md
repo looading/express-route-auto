@@ -4,9 +4,9 @@
 
 
 ## express-route-auto
-用于express路由的自动加载(目前支持post)
+用于express路由的自动加载(目前支持post,get)
 
-初步想法是为了便于 后端api服务的开发
+初步想法是为了便于 后端服务的开发
 
 ## install
 
@@ -14,41 +14,45 @@
 npm install express-route-auto --save
 ```
 
-## setup
+## config
+```js
+module.exports = {
+  // routeDir 是必须的， 是controller的文件地址（相对于根目录））
+  routeDir: '/controller',
+  // APP_PATH 也是必须的，是模块获取到根目录路径
+  APP_PATH: __dirname
+}
 
+```
+
+
+## setup
 ```js
 // 使配置公共化
-let { config } = require('express-route-auto');
+const express = require('express');
 
-let obj = {
-	Sequelize,
-	DataBase,
-	sqlite,
-	util,
-	http,
-	URL,
-	querystring,
-	fs,
-	yaml,
-	// routeDir 是必须的， 是controller的文件地址（相对于根目录））
-	routeDir: '/controller',
-	// APP_PATH 也是必须的，是模块获取到根目录路径
-  	APP_PATH: __dirname
-}
+const { config, Generate } = require('../index');
 
-for (var item in obj) {
-	if (obj.hasOwnProperty(item)) {
-		config[item] = obj[item]
-	}
-}
+const conf = require('./conf');
 
-const { generate } = require('express-route-auto');
+const port = 3000;
 
-const app = express();
+// 初始化配置项
+config.add(conf);
 
+let app = express();
+
+// Generate 必须在配置完成后实例化
+let generate = new Generate();
+app.use(generate());
+
+
+
+app.listen(port, () => {
+  console.info(`server is running on port: ${port}`);
+})
 // 生成路由并使用
-app.use(generate())
-
+app.use(generate());
 ```
 
 ## 编写路由
@@ -60,11 +64,15 @@ const { Action } = require('express-route-auto');
 class Index extends Action{
   constructor() {
     super();
-    return this.run;
   }
-  run(req, res, next) {
-    res.send('this is index!')
+	// 处理post 请求
+  post(req, res, next) {
+    res.send('this is post!');
   }
+	// 处理get 请求
+	get(req, res, next) {
+		res.send('this is get!');
+	}
 }
 
 module.exports = new Index();
@@ -83,11 +91,8 @@ module.exports = new Index();
 
 ### continue
 按照上述的配置基本就能跑起来了
-
-由于是基于自己项目的，目前还没有扩展开来，
+详细的可以查看demo文件里的代码
+由于是基于自己项目的，目前还没有扩展开来。
 
 ### feature
-- 支持 get 等
-- 支持 /user/:id
-- 支持 middleware
-- 提供视图
+后续添加中

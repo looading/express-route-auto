@@ -1,17 +1,14 @@
-
-const config = require('../config')
-
-
-
+const Config = require('../config');
 class Action {
-  constructor(res, req, next) {
-    for (var variable in config) {
-      if (config.hasOwnProperty(variable)) {
-        this[variable] = config[variable];
+  constructor() {
+    let configs = Config.get();
+    for (var variable in configs) {
+      if (configs.hasOwnProperty(variable)) {
+        this[variable] = configs[variable];
       }
     }
-
-    this.run = this.run.bind(this);
+    this.post = this.post.bind(this);
+    this.get = this.get.bind(this);
   }
 }
 

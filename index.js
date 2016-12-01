@@ -4,6 +4,6 @@ var config = require('./config');
 
 module.exports = {
 		Action,
-		generate: new Generate(),
+		Generate,
 		config
 	};
