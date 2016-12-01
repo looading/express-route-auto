@@ -57,7 +57,6 @@ app.use(generate());
 
 ## 编写路由
 ```js
-# /
 
 const { Action } = require('express-route-auto');
 
