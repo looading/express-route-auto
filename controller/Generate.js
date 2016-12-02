@@ -61,8 +61,8 @@ class Generate {
     					let a = action.slice(0, -3);
     					a = a == 'index'? '': a;
     					let baseDir = routeDir.slice(0,1);
-    					actionsMaps[ baseDir + controller + '/' + a ] = that.configs.APP_PATH + '/controller/' + controller + '/' + action;
-              renderLog("path: %s, controller: %s", baseDir + controller + '/' + a, that.configs.APP_PATH + '/controller/' + controller + '/' + action);
+    					actionsMaps[ baseDir + controller + '/' + a ] = that.configs.APP_PATH + '/' + controller + '/' + action;
+              renderLog("path: %s, controller: %s", baseDir + controller + '/' + a, that.configs.APP_PATH + '/' + controller + '/' + action);
     				} else {
     					render(routeDir + '/' + controller + '/' + action);
     				}
