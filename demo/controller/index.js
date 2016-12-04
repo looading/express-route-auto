@@ -4,10 +4,10 @@ class Index extends Action {
   constructor() {
     super();
   }
-  post(req, res, next) {
+  _post(req, res, next) {
     res.send('this is / ::post!');
   }
-	get(req, res, next) {
+	_get(req, res, next) {
 		res.send('this is / ::get!');
 	}
 }

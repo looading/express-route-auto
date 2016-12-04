@@ -52,7 +52,8 @@ app.listen(port, () => {
   console.info(`server is running on port: ${port}`);
 })
 // 生成路由并使用
-app.use(generate());
+let routes = generate()
+app.use(routes);
 ```
 
 ## 编写路由
@@ -64,11 +65,11 @@ class Index extends Action{
     super();
   }
 	// 处理post 请求
-  post(req, res, next) {
+  _post(req, res, next) {
     res.send('this is post!');
   }
 	// 处理get 请求
-	get(req, res, next) {
+	_get(req, res, next) {
 		res.send('this is get!');
 	}
 }

@@ -9,7 +9,7 @@ const path = require('path');
 let routeLog = debug('express-route-auto:route');
 let renderLog = debug('express-route-auto:render');
 let confLog = debug('express-route-auto:configs');
-
+let mapLog = debug('express-route-auto:map')
 
 let router = express.Router();
 
@@ -51,7 +51,7 @@ class Generate {
           let a = controller == 'index.js' ? '' : controller;
           let baseDir = routeDir.slice(12);
           renderLog("----path:%s, baseDir:%s, routeDir:%s", '/' + baseDir + a,baseDir, routeDir);
-          actionsMaps['/' + baseDir + a] = path.join(that.configs.APP_PATH, routeDir, controller);
+          actionsMaps[path.join('/',baseDir, a)] = path.join(that.configs.APP_PATH, routeDir, controller);
           renderLog("path: %s, controller: %s", '/' + baseDir + a, path.join(that.configs.APP_PATH, routeDir, controller));
         }
         else {
@@ -63,7 +63,7 @@ class Generate {
     					a = a == 'index'? '': a;
     					let baseDir = routeDir.slice(0,1);
               renderLog("----path:%s, baseDir:%s, routeDir:%s", '/' + baseDir + a,baseDir, routeDir);
-    					actionsMaps[ baseDir + controller + '/' + a ] = path.join(that.configs.APP_PATH, routeDir, controller, action);
+    					actionsMaps[path.join(baseDir,controller, a)] = path.join(that.configs.APP_PATH, routeDir, controller, action);
               renderLog("path: %s, controller: %s", routeDir + controller + '/' + a, path.join(that.configs.APP_PATH, baseDir, controller, action));
     				} else {
     					render(path.join(routeDir, controller, action));
@@ -86,15 +86,16 @@ class Generate {
   	for (var action in actionsMap) {
   		if (actionsMap.hasOwnProperty(action)) {
         let actionHandle = require(actionsMap[action]);
+        mapLog('pathname: %s, file: %s, Function: %s', action, actionsMap[action], util.inspect(actionHandle._post))
         // method get
-        if(actionHandle.get) {
+        if(actionHandle._get) {
           routeLog('method: %s, path: %s', 'post', action);
-          router.get(action, actionHandle.get);
+          router.get(action, actionHandle._get);
         }
         // method post
-  			if(actionHandle.post) {
+  			if(actionHandle._post) {
           routeLog('method: %s, path: %s', 'post', action);
-          router.post(action, actionHandle.post);
+          router.post(action, actionHandle._post);
         }
 
   		}
