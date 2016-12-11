@@ -7,8 +7,8 @@ class Action {
         this[variable] = configs[variable];
       }
     }
-    this._post = this._post.bind(this);
-    this._get = this._get.bind(this);
+    this._post?this._post.bind(this):false
+    this._get?this._get.bind(this):false
   }
 }
 
