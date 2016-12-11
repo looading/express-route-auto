@@ -10,8 +10,38 @@ let routeLog = debug('express-route-auto:route');
 let renderLog = debug('express-route-auto:render');
 let confLog = debug('express-route-auto:configs');
 let mapLog = debug('express-route-auto:map')
-
+let errLog = debug('express-route-auto:error')
 let router = express.Router();
+
+// 获取 routePath => file map
+function getModulesMap (filePath, parentPath) {
+  return fs
+    .statSync(filePath)
+    .isDirectory()?
+    (fs
+      .readdirSync(filePath)
+      .map(item => fs
+          .statSync(path.join(filePath, item))
+          .isDirectory()?
+          (getModulesMap(path.join(filePath, item), path.join(parentPath, item)).length? 
+            ({ [ path.join(parentPath, item) ]: getModulesMap(path.join(filePath, item), path.join(parentPath, item)) }) 
+            : undefined)
+          : ({ [ path.join(parentPath, (item === 'index.js' ? '/': item.split('.')[0])) ]: path.join(filePath, item) }))
+      .filter(val => val!== undefined))
+    : undefined
+}
+
+// 将 getModulesMap 转化为一维结构
+function formatMap (modulesMap) {
+  return modulesMap
+    .map(item => {
+      let key = Object.keys(item)
+      return key
+        .map(val => _.isString(item[key])? item : formatMap(item[key]))
+        .reduce((pre, now) => Object.assign(pre, now))
+    })
+    .reduce((pre, now) => Object.assign(pre, now))
+}
 
 class Generate {
   constructor() {
@@ -20,76 +50,20 @@ class Generate {
     return this.generate;
   }
   /**
-   * 获取controller name
-   */
-  getModules(routeDir) {
-  	let dirs = fs.readdirSync(path.join(this.configs.APP_PATH, routeDir));
-  	let controllers = []
-
-  	// 获取controller
-  	dirs.forEach((val, index, arr) => {
-  		let stats = fs.statSync(path.join(this.configs.APP_PATH, routeDir, val));
-  		controllers.push(val)
-  	});
-  	return controllers;
-  }
-
-  /**
-   * 生成 路由 -> 处理函数 Map
-   */
-  getActionsMap() {
-  	let actionsMaps = {};
-
-    let that = this;
-  	function render(routeDir) {
-  		let controllers = that.getModules(routeDir);
-  		//生成 路由->处理函数 Map
-  		controllers.forEach((controller, index,  arr) => {
-        let stats = fs.statSync(path.join(that.configs.APP_PATH, routeDir, controller))
-
-        if(stats.isFile()) {
-          let a = controller == 'index.js' ? '' : controller;
-          let baseDir = routeDir.slice(12);
-          renderLog("----path:%s, baseDir:%s, routeDir:%s", '/' + baseDir + a,baseDir, routeDir);
-          actionsMaps[path.join('/',baseDir, a)] = path.join(that.configs.APP_PATH, routeDir, controller);
-          renderLog("path: %s, controller: %s", '/' + baseDir + a, path.join(that.configs.APP_PATH, routeDir, controller));
-        }
-        else {
-          let actions = fs.readdirSync(path.join(that.configs.APP_PATH, routeDir, controller));
-    			actions.forEach((action, index, arr) => {
-    				let stats = fs.statSync(path.join(that.configs.APP_PATH, routeDir, controller, action))
-    				if(stats.isFile()) {
-    					let a = action.slice(0, -3);
-    					a = a == 'index'? '': a;
-    					let baseDir = routeDir.slice(0,1);
-              renderLog("----path:%s, baseDir:%s, routeDir:%s", '/' + baseDir + a,baseDir, routeDir);
-    					actionsMaps[path.join(baseDir,controller, a)] = path.join(that.configs.APP_PATH, routeDir, controller, action);
-              renderLog("path: %s, controller: %s", routeDir + controller + '/' + a, path.join(that.configs.APP_PATH, baseDir, controller, action));
-    				} else {
-    					render(path.join(routeDir, controller, action));
-    				}
-    			})
-        }
-  		})
-  	}
-  	render(this.configs.routeDir);
-  	return actionsMaps;
-  }
-
-  /**
    * 生成路由
    */
   generate() {
-  	let actionsMap = this.getActionsMap();
+  	let actionsMap = getModulesMap(path.join(this.configs.APP_PATH, this.configs.routeDir), '/');
+    actionsMap = formatMap(actionsMap)
 
-  	// 自动加载路由（二级路由）
+  	// 自动加载路由
   	for (var action in actionsMap) {
   		if (actionsMap.hasOwnProperty(action)) {
         let actionHandle = require(actionsMap[action]);
         mapLog('pathname: %s, file: %s, Function: %s', action, actionsMap[action], util.inspect(actionHandle._post))
         // method get
         if(actionHandle._get) {
-          routeLog('method: %s, path: %s', 'post', action);
+          routeLog('method: %s, path: %s', 'get', action);
           router.get(action, actionHandle._get);
         }
         // method post
@@ -97,11 +71,15 @@ class Generate {
           routeLog('method: %s, path: %s', 'post', action);
           router.post(action, actionHandle._post);
         }
-
   		}
   	}
   	return router;
   }
 
 }
-module.exports = Generate;
+
+module.exports = {
+  Generate,
+  getModulesMap,
+  formatMap
+};

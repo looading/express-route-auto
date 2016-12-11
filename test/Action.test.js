@@ -15,11 +15,11 @@ describe('extends Action', () => {
       super();
     }
 
-    post(){
+    _post(){
 
     }
 
-    get() {
+    _get() {
 
     }
   }
@@ -28,17 +28,16 @@ describe('extends Action', () => {
     assert.equal(true, _.isFunction(exe));
   })
 
-  it('new exe should return a  method: post', () => {
-    assert.equal(true, _.isFunction((new exe()).post));
+  it('new exe should return a  method: _post', () => {
+    assert.equal(true, _.isFunction((new exe())._post));
   })
 
-  it('new exe should return a  method: get', () => {
-    assert.equal(true, _.isFunction((new exe()).get));
+  it('new exe should return a  method: _get', () => {
+    assert.equal(true, _.isFunction((new exe())._get));
   })
 
   it('new exe should return a key:name', () => {
     assert.equal(true, _.isString((new exe()).name));
   })
-
 
 });

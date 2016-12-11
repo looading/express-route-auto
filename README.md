@@ -18,7 +18,7 @@ npm install express-route-auto --save
 ```js
 module.exports = {
   // routeDir 是必须的， 是controller的文件地址（相对于根目录））
-  routeDir: '/controller',
+  routeDir: 'controller',
   // APP_PATH 也是必须的，是模块获取到根目录路径
   APP_PATH: __dirname
 }
@@ -85,6 +85,9 @@ module.exports = new Index();
 	- user				
 		- index.js		=>	/user/
 		- show.js			=> /user/show
+    - info        // 空目录不会成为路由
+    — detail
+      - index.js  => /user/detail
 	- index.js			=> /
 ```
 

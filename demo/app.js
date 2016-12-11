@@ -10,7 +10,6 @@ config.add(conf);
 
 let app = express();
 
-
 app.get('/123/', (req, res, next) => {
   next()
 })
@@ -18,10 +17,6 @@ app.get('/123/', (req, res, next) => {
 let generate = new Generate();
 // let routes = generate()
 app.use(generate());
-
-
-
-console.log(util.inspect(app._router))
 
 app.listen(port, () => {
   console.info(`server is running on port: ${port}`);
