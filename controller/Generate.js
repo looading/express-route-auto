@@ -71,6 +71,16 @@ class Generate {
           routeLog('method: %s, path: %s', 'post', action);
           router.post(action, actionHandle._post);
         }
+        // method put
+  			if(actionHandle._put) {
+          routeLog('method: %s, path: %s', 'put', action);
+          router.put(action, actionHandle._put);
+        }
+        // method delete
+  			if(actionHandle._delete) {
+          routeLog('method: %s, path: %s', 'delete', action);
+          router.delete(action, actionHandle._delete);
+        }
   		}
   	}
   	return router;

@@ -9,6 +9,8 @@ class Action {
     }
     this._post?this._post.bind(this):false
     this._get?this._get.bind(this):false
+    this._put?this._put.bind(this):false
+    this._delete?this._delete.bind(this):false
   }
 }
 

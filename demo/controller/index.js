@@ -10,6 +10,9 @@ class Index extends Action {
 	_get(req, res, next) {
 		res.send('this is / ::get!');
 	}
+  _delete(req, res, next) {
+    res.send('this is delete')
+  }
 }
 
 module.exports = new Index();
