@@ -7,10 +7,19 @@ class Action {
         this[variable] = configs[variable];
       }
     }
-    this._post?this._post.bind(this):false
-    this._get?this._get.bind(this):false
-    this._put?this._put.bind(this):false
-    this._delete?this._delete.bind(this):false
+    
+    if(this._post) {
+      this._post = this._post.bind(this);
+    }
+    if(this._get) {
+      this._get = this._get.bind(this);
+    }
+    if(this._delete) {
+      this._delete = this._delete.bind(this);
+    }
+    if(this._put) {
+      this._put = this._put.bind(this);
+    }
   }
 }
 
