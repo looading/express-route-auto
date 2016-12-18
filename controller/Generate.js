@@ -61,6 +61,8 @@ class Generate {
   		if (actionsMap.hasOwnProperty(action)) {
         let actionHandle = require(actionsMap[action]);
         mapLog('pathname: %s, file: %s, Function: %s', action, actionsMap[action], util.inspect(actionHandle._post))
+        // 修复window 路径问题 --> express 会是识别为正则表达式
+        action = action.split("\\").join("/")
         // method get
         if(actionHandle._get) {
           routeLog('method: %s, path: %s', 'get', action);
