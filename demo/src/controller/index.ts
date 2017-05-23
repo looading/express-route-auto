@@ -1,15 +1,18 @@
-const { Action } = require('../../../index');
+import { Action } from "../../../typing";
 
 class Index extends Action {
   constructor() {
     super();
   }
-  _post(req, res, next) {
+  post = (req, res, next) => {
     res.send('this is / ::post!');
   }
-	_get(req, res, next) {
+	get = (req, res, next) => {
 		res.send('this is / ::get!');
 	}
+  delete = (req, res, next) => {
+    res.send('this is delete')
+  }
 }
 
 module.exports = new Index();

@@ -1,10 +1,10 @@
 {
   "name": "express-route-auto",
-  "version": "1.2.3",
+  "version": "2.0.0",
   "description": "auto express route",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/config.test.js test/Action.test.js test/routeMap.test.js --compilers js:babel-core/register"
+    "test": "mocha test/**/*.test.js --compilers js:babel-core/register"
   },
   "keywords": [
     "express",
@@ -21,6 +21,10 @@
   "author": "ctyloading",
   "license": "MIT",
   "dependencies": {
+    "@types/debug": "0.0.29",
+    "@types/express": "^4.0.35",
+    "@types/lodash": "^4.14.64",
+    "@types/node": "^7.0.22",
     "express": "^4.14.0",
     "lodash": "^4.17.2"
   },
@@ -33,5 +37,6 @@
     "expect": "^1.20.2",
     "log-theme": "^1.0.1",
     "mocha": "^3.2.0"
-  }
+  },
+  "typings": "typing/index.ts"
 }

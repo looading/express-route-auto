@@ -1,4 +1,4 @@
-const { Action } = require('../../../../../index');
+import { Action } from "../../../../../typing";
 
 class Index extends Action {
   constructor() {

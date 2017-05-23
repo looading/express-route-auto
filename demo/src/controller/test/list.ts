@@ -1,13 +1,13 @@
-const { Action } = require('../../../index');
+import { Action } from "../../../../typing";
 
 class List extends Action {
   constructor() {
     super();
   }
-  _post(req, res, next) {
+  post = (req, res, next) => {
     res.send('this is list ::post!');
   }
-	_get(req, res, next) {
+  get = (req, res, next) => {
 		res.send('this is list ::get!');
 	}
 }

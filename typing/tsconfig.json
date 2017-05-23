@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "sourceMap": false,
+    "outDir": "../controller",
+    "moduleResolution": "node",
+    "lib": [
+      "es2017"
+    ]
+  },
+  "include": [
+    "./**/*"
+  ]
+}
