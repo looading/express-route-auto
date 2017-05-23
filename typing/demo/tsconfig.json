@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es5",
     "module": "commonjs",
     "noImplicitAny": false,
     "sourceMap": false,
     "moduleResolution": "node",
-    "outDir": "../lib",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
     "lib": [
       "es2017"
-    ]
+    ],
+    "allowJs": true
   }
 }

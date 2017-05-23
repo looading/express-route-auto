@@ -1,10 +1,12 @@
 {
   "name": "express-route-auto",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "auto express route",
   "main": "controller/index.js",
+  "typings": "typing/index.ts",
   "scripts": {
-    "test": "mocha test/**/*.test.js --compilers js:babel-core/register"
+    "test": "mocha test/**/*.test.js --compilers js:babel-core/register",
+    "prepublish": "tsc -p typing"
   },
   "keywords": [
     "express",
@@ -36,7 +38,7 @@
     "debug": "^2.3.3",
     "expect": "^1.20.2",
     "log-theme": "^1.0.1",
-    "mocha": "^3.2.0"
-  },
-  "typings": "typing/index.ts"
+    "mocha": "^3.2.0",
+    "typescript": "^2.3.3"
+  }
 }

@@ -1,6 +1,6 @@
-const Action = require('./controller/Action');
-const { Generate } = require('./controller/Generate');
-var config = require('./controller/config');
+const Action = require('./lib/Action');
+const { Generate } = require('./lib/Generate');
+var config = require('./lib/config');
 
 module.exports = {
 		Action,
