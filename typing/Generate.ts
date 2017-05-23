@@ -63,7 +63,7 @@ export class Generate {
         // 修复window 路径问题 --> express 会是识别为正则表达式
         action = action.split("\\").join("/");
 
-        ["all", "get", "post", "head", "put", 'delete'].map(method => {
+        ["all", "get", "post", "head", "put", "delete"].map(method => {
           if(actionHandle[method]) {
             routeLog('method: %s, path: %s', 'delete', action);
 

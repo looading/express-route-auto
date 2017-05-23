@@ -1,3 +1,8 @@
+## 2017/05/04
+更新成Typescript
+修改路由文件方法 -> all\get\post\head\put\delete
+为路由controller增加Props属性
+
 ## 2016/12/18
 修复windows上路径问题，导致路由没有成功注册
 express路由注册是正则表达式。。正好和windows路径相符
