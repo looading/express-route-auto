@@ -43,7 +43,11 @@ export function formatMap (modulesMap) {
 }
 
 export class Generate {
-  private configs: any;
+  private configs: {
+    APP_PATH: string;
+    routeDir: string;
+    props: any[]
+  };
   constructor(configs) {
     Config.add(configs.props)
     this.configs = configs

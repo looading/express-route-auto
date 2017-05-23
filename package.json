@@ -1,8 +1,8 @@
 {
   "name": "express-route-auto",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "auto express route",
-  "main": "index.js",
+  "main": "controller/index.js",
   "scripts": {
     "test": "mocha test/**/*.test.js --compilers js:babel-core/register"
   },

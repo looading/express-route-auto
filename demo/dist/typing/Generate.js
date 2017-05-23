@@ -61,7 +61,7 @@ var Generate = (function () {
                     mapLog('pathname: %s, file: %s, Function: %s', action, actionsMap[action], util.inspect(actionHandle_1._post));
                     // 修复window 路径问题 --> express 会是识别为正则表达式
                     action = action.split("\\").join("/");
-                    ["all", "get", "post", "head", "put", 'delete'].map(function (method) {
+                    ["all", "get", "post", "head", "put", "delete"].map(function (method) {
                         if (actionHandle_1[method]) {
                             routeLog('method: %s, path: %s', 'delete', action);
                             /**
