@@ -4,77 +4,78 @@
 
 
 ## express-route-auto
-用于express路由的自动加载(目前支持post,get)
+用于express路由的自动加载
 
 初步想法是为了便于 后端服务的开发
 
+推荐用Typescript
+
 ## install
 
-```js
+```bash
 npm install express-route-auto --save
 ```
 
-## config
-```js
-module.exports = {
-  // routeDir 是必须的， 是controller的文件地址（相对于根目录））
-  routeDir: 'controller',
-  // APP_PATH 也是必须的，是模块获取到根目录路径
-  APP_PATH: __dirname
-}
-
-```
-
-
 ## setup
-```js
-// 使配置公共化
-const express = require('express');
+``` ts
+import  * as express from "express";
+import * as util from "util";
+import { Generate } from "express-route-auto";
 
-const { config, Generate } = require('../index');
-
-const conf = require('./conf');
 
 const port = 3000;
 
-// 初始化配置项
-config.add(conf);
 
 let app = express();
 
-// Generate 必须在配置完成后实例化
-let generate = new Generate();
-app.use(generate());
+app.get('/123/', (req, res, next) => {
+  next()
+})
 
-
+let generate = new Generate({
+  // routeDir 是必须的， 是controller的文件地址（相对于根目录））
+  routeDir: 'controller',
+  // APP_PATH 也是必须的，是模块获取到根目录路径
+  APP_PATH: __dirname,
+  /**
+  * 为里每一个Controller增加props 挂载到this上， 比如数据库的Model -> this.User.add(...)
+  * props: {
+  *   User: Model.User
+  * }
+  */
+  props: {
+    Name: 'looading'
+  }
+});
+// let routes = generate()
+app.use(generate.init());
 
 app.listen(port, () => {
   console.info(`server is running on port: ${port}`);
 })
-// 生成路由并使用
-let routes = generate()
-app.use(routes);
 ```
 
-## 编写路由
+## Controller
 ```js
-const { Action } = require('express-route-auto');
+import { Action } from "express-route-auto";
 
-class Index extends Action{
+class Index extends Action {
   constructor() {
     super();
   }
-	// 处理post 请求
-  _post(req, res, next) {
-    res.send('this is post!');
+  post = (req, res, next) => {
+    res.send('this is / ::post!');
   }
-	// 处理get 请求
-	_get(req, res, next) {
-		res.send('this is get!');
+	get = (req, res, next) => {
+		res.send('this is / ::get!');
 	}
+  delete = (req, res, next) => {
+    res.send('this is delete')
+  }
 }
 
 module.exports = new Index();
+
 
 ```
 
@@ -97,4 +98,5 @@ module.exports = new Index();
 由于是基于自己项目的，目前还没有扩展开来。
 
 ### feature
-后续添加中
+
+...

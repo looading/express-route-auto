@@ -1,6 +1,6 @@
 {
   "name": "express-route-auto",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "auto express route",
   "main": "controller/index.js",
   "scripts": {
