@@ -1,3 +1,3 @@
-export { Action } from "./Action";
-export { Generate } from "./Generate";
+export * from "./Action";
+export * from "./Generate";
 export { Config } from "./config";

@@ -12,34 +12,58 @@ let mapLog = debug('express-route-auto:map')
 let errLog = debug('express-route-auto:error')
 let router = express.Router();
 
+interface ControllerLevel {
+  [id: number]: ControllerOrDir[]
+}
+interface ControllerOrDir {
+  [router: string]: string | any
+}
+
 // 获取 routePath => file map
-export function getModulesMap (filePath, parentPath) {
-  return fs
-    .statSync(filePath)
-    .isDirectory()?
-    (fs
+export const getModulesMap: (filePath: string, parentPath: string) => ControllerLevel[] | any  = (filePath, parentPath) => {
+  if(fs.statSync(filePath).isDirectory()) {
+    let files = fs
       .readdirSync(filePath)
       .map(item => fs
           .statSync(path.join(filePath, item))
           .isDirectory()?
           (getModulesMap(path.join(filePath, item), path.join(parentPath, item)).length? 
-            ({ [ path.join(parentPath, item) ]: getModulesMap(path.join(filePath, item), path.join(parentPath, item)) }) 
+            ({ key : path.join(parentPath, item), value: getModulesMap(path.join(filePath, item), path.join(parentPath, item)) }) 
             : undefined)
-          : ({ [ path.join(parentPath, (item === 'index.js' ? '/': item.split('.')[0])) ]: path.join(filePath, item) }))
-      .filter(val => val!== undefined))
-    : undefined
+          : ({ key: path.join(parentPath, (item === 'index.js' ? '/': item.split('.')[0])), value: path.join(filePath, item) }))
+      .filter(val => val!== undefined)
+    // sort route array
+    files.sort((a, b) => {
+      let aArr = a.key.split('/')
+      let bArr = b.key.split('/')
+      if(aArr.length < bArr.length) {
+        return 1;
+      } 
+      if(aArr.length > bArr.length) {
+        return -1;
+      } 
+      if(aArr.length == bArr.length) {
+        return aArr[aArr.length-1].length > bArr[bArr.length-1].length ? 1 : -1
+      } 
+    })
+    return files
+  } else {
+    return undefined
+  }
 }
 
 // 将 getModulesMap 转化为一维结构
-export function formatMap (modulesMap) {
+export const formatMap  = (modulesMap) => {
   return modulesMap
     .map(item => {
-      let key = Object.keys(item)
-      return key
-        .map(val => _.isString(item[val])? item : formatMap(item[val]))
-        .reduce((pre, now) => Object.assign(pre, now))
+      return {
+        key: item.key,
+        value: _.isString(item.value)? item.value : formatMap(item.value)
+      }
     })
-    .reduce((pre, now) => Object.assign(pre, now))
+    .reduce((pre, now) => {
+      return  _.isString(now.value) ? [].concat(pre, now) : [].concat(pre, now.value)
+    })
 }
 
 export class Generate {
@@ -58,19 +82,22 @@ export class Generate {
   init = () => {
   	let actionsMap = getModulesMap(path.join(this.configs.APP_PATH, this.configs.routeDir), '/');
     actionsMap = formatMap(actionsMap)
-
   	// 自动加载路由
-  	for (var action in actionsMap) {
-  		if (actionsMap.hasOwnProperty(action)) {
-        let actionHandle = require(actionsMap[action]);
+  	for (let controller of actionsMap) {
+      let action = controller.key
+      let actionModule = controller.value
+        let actionHandle = require(actionModule);
         mapLog('pathname: %s, file: %s, Function: %s', action, actionsMap[action], util.inspect(actionHandle._post))
         // 修复window 路径问题 --> express 会是识别为正则表达式
         action = action.split("\\").join("/");
-
+        // add parmas
+        action = action.match(/\/$/g) ? action : [action, '/'].join('');
         ["all", "get", "post", "head", "put", "delete"].map(method => {
           if(actionHandle[method]) {
-            routeLog('method: %s, path: %s', 'delete', action);
-
+            if( actionHandle.params && actionHandle.params[method]) {
+                action = [action, ':', actionHandle.params[method].join('/:')].join('')
+            }
+            routeLog('method: %s, path: %s', 'delete', action);            
             /**
              * actionHandle[method] is Array  ==> there are some middleware function in Array
              */
@@ -79,10 +106,9 @@ export class Generate {
             } else {
               router[method](action, actionHandle[method])
             }
+            routeLog('Load --> %s :: %s', method, action)
           }
         })
-
-  		}
   	}
   	return router;
   }
