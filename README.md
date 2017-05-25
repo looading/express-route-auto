@@ -60,6 +60,9 @@ app.listen(port, () => {
 import { Action } from "express-route-auto";
 
 class Index extends Action {
+  params = {
+    get: ['id']
+  }
   constructor() {
     super();
   }
@@ -67,7 +70,11 @@ class Index extends Action {
     res.send('this is / ::post!');
   }
 	get = (req, res, next) => {
-		res.send('this is / ::get!');
+    let { id } = req.params
+		res.json({
+      id,
+      context: 'this is / ::get!'
+    });
 	}
   delete = (req, res, next) => {
     res.send('this is delete')

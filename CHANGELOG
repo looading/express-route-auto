@@ -1,4 +1,8 @@
-## 2017/05/04
+## 2017/05/25
+添加路由参数功能
+增加路由权值 -> 默认按照文件结构加载路由
+
+## 2017/05/24
 更新成Typescript
 修改路由文件方法 -> all\get\post\head\put\delete
 为路由controller增加Props属性
