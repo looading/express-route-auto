@@ -82,33 +82,34 @@ export class Generate {
   init = () => {
   	let actionsMap = getModulesMap(path.join(this.configs.APP_PATH, this.configs.routeDir), '/');
     actionsMap = formatMap(actionsMap)
+    actionsMap = actionsMap instanceof Array ? actionsMap : [actionsMap]
   	// 自动加载路由
   	for (let controller of actionsMap) {
       let action = controller.key
       let actionModule = controller.value
-        let actionHandle = require(actionModule);
-        mapLog('pathname: %s, file: %s, Function: %s', action, actionsMap[action], util.inspect(actionHandle._post))
-        // 修复window 路径问题 --> express 会是识别为正则表达式
-        action = action.split("\\").join("/");
-        // add parmas
-        action = action.match(/\/$/g) ? action : [action, '/'].join('');
-        ["all", "get", "post", "head", "put", "delete"].map(method => {
-          if(actionHandle[method]) {
-            if( actionHandle.params && actionHandle.params[method]) {
-                action = [action, ':', actionHandle.params[method].join('/:')].join('')
-            }
-            routeLog('method: %s, path: %s', 'delete', action);            
-            /**
-             * actionHandle[method] is Array  ==> there are some middleware function in Array
-             */
-            if(actionHandle[method] instanceof Array) {
-              router[method](action, ...actionHandle[method])
-            } else {
-              router[method](action, actionHandle[method])
-            }
-            routeLog('Load --> %s :: %s', method, action)
+      let actionHandle = require(actionModule);
+      mapLog('pathname: %s, file: %s, Function: %s', action, actionsMap[action], util.inspect(actionHandle._post))
+      // 修复window 路径问题 --> express 会是识别为正则表达式
+      action = action.split("\\").join("/");
+      // add parmas
+      action = action.match(/\/$/g) ? action : [action, '/'].join('');
+      ["all", "get", "post", "head", "put", "delete"].map(method => {
+        if(actionHandle[method]) {
+          if( actionHandle.params && actionHandle.params[method]) {
+              action = [action, ':', actionHandle.params[method].join('/:')].join('')
           }
-        })
+          routeLog('method: %s, path: %s', 'delete', action);            
+          /**
+           * actionHandle[method] is Array  ==> there are some middleware function in Array
+           */
+          if(actionHandle[method] instanceof Array) {
+            router[method](action, ...actionHandle[method])
+          } else {
+            router[method](action, actionHandle[method])
+          }
+          routeLog('Load --> %s :: %s', method, action)
+        }
+      })
   	}
   	return router;
   }
